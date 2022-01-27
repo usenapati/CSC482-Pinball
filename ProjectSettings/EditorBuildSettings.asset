@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Completed-Game/Basic-Pinball.unity
+    guid: 8d2377b032a23e247aae91b4957e0fee
+  m_configObjects:
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 18872312caa347f4886e876c7f24acd5,
+      type: 2}
+    UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 8cb5135694870c3409a8f071eca48b50,
+      type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 87e915b2e3a3d0c44ae3b408c701505b,
+      type: 2}
