@@ -14,26 +14,41 @@ public class GameManager : MonoBehaviour
 
     // Gameplay Variables
     [Header("Game Objects")]
-    // Ball
-    // Plunger
-    // Drain
+    [Header("Ball")]
+    public GameObject ball;                      // Connect the ball Prefab
+
+    [Header("Plunger")]
+    private GameObject spawnBall;               // (connected automatically) The GameObject that manage the ejection after a ball respawn
+    public GameObject plunger;
+
+    [Header("Drain")]
+    public GameObject drain;
+
     // Flippers
+    [Header("Flippers")]
+    public GameObject[] flippers;
+
     // Bumpers
+    [Header("Bumpers")]
+    public GameObject[] bumpers;
 
 
     [Header("Player Life and Score")]
     public int Lives = 3;                       // Max Lives
+    private int weeksCompleted = 0;             // Track weeks the player has completed
     private int currentLives = 0;               // Current Lives
     private int roundScore = 0;                 // Score during a round
     private int playerScore = 0;                // Player Score
     private int numBall;                        // The number of ballss played by the player
-    private bool b_startGame;                     // True : Player start the game . False : Game is over
+    private bool b_startGame;                   // True : Player start the game . False : Game is over
+
+    [Header("Coroutine Manager")]
+    GameObject CoroutineManager;                // Update GameObject to class
 
     [Header("Tilt Mode")]
     public float minTimeTilt = 1;	            // Minimum time in seconds between two shake
     private float tiltTimer = 0; 		        // Timer to know if we need to start tilt mode
     private int tilts = 0;				        // 0 : Tilt Deactivate	 	1 : Player shakes the playfield			2 : Tilt Mode Enable  
-
 
     [Header("Mode Multi Ball")]
     public GameObject obj_MultiBall;             // Object that manage the multi-ball on playfield. Manage how the ball is ejected on playfield
@@ -63,7 +78,8 @@ public class GameManager : MonoBehaviour
     // Next Ball or Game Over
 
     // UI
-    [Header("LCD Text")]
+    [Header("UI ")]
+    [Header("Board Text")]
     private Text GUI_Txt_Timer;
     private Text GUI_Txt_Info_Ball;
     private Text GUI_Txt_Score;
@@ -78,15 +94,10 @@ public class GameManager : MonoBehaviour
     public string[] Txt_Game;                   // Array : All the text use by the game Manager
 
 
-    [Header("Plunger")]
-    private GameObject spawnBall;               // (connected automatically) The GameObject that manage the ejection after a ball respawn
-
-
-    [Header("Ball")]
-    public Transform ball;                      // Connect the ball Prefab
-
 
     // SFX
+    [Header("Audio : Sfx")]
+    private AudioSource sound;
     public AudioClip s_Load_Ball;					// play a sound when the ball respawn
     public AudioClip a_LoseBall;                // Play a sound when the player lose a ball
     public AudioClip a_Bonus_Screen;			// Play a sound during the bonus score 
@@ -100,6 +111,12 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Find all Game Objects
+
+        // Set Active to false on Game Objects
+
+
+        // Play Audio
 
     }
 
@@ -112,7 +129,7 @@ public class GameManager : MonoBehaviour
     // START STATE
     public void startState()
     {
-
+        // Reset Scores and Lives
     }
 
     // PAUSE MODE
