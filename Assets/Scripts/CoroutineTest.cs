@@ -2,13 +2,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+
 
 public class CoroutineTest : MonoBehaviour
 {
-    public float weekTimer = 45;
+
+    public Text scoreObj;
+
+    public float weekTimer;
+    public int startScore;
     public int insurance;
     public int rent;
     public int groceries;
+    public int carPayment;
 
     private int numWeeks = 4;
     private int currWeek = 1;
@@ -17,12 +25,14 @@ public class CoroutineTest : MonoBehaviour
     void Start()
     {
         StartCoroutine(weeklyCoroutine(null));
+        scoreObj.text = "$" + startScore.ToString();
     }
+
 
     // Update is called once per frame
     void Update()
     {
-        
+        scoreObj.text = "$" + startScore.ToString();
     }
 
     IEnumerator weeklyCoroutine(Transform target)
@@ -55,22 +65,26 @@ public class CoroutineTest : MonoBehaviour
 
     private void weekOne()
     {
-        Debug.Log("Deduct cost from total for Week one expenses");
+        startScore = startScore - rent;
+        scoreObj.text = "$" + startScore.ToString();
     }
 
     private void weekTwo()
     {
-        Debug.Log("Deduct cost from total for Week two expenses");
+        startScore = startScore - groceries;
+        scoreObj.text = "$" + startScore.ToString();
     }
 
     private void weekThree()
     {
-        Debug.Log("Deduct cost from total for Week three expenses");
+        startScore = startScore - insurance;
+        scoreObj.text = "$" + startScore.ToString();
     }
 
     private void weekFour()
     {
-        Debug.Log("Deduct cost from total for Week four expenses");
+        startScore = startScore - carPayment;
+        scoreObj.text = "$" + startScore.ToString();
     }
 
 }
