@@ -1,12 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RandomPowerup : MonoBehaviour
 {
     public int numRandomPowerUps;
-    List<GameObject> powerUpList;
 
+    [Header("Values to be used for Game Manager")]
+    public int currentPowerUpValue;
+    public string currentPowerUpDesc = "";
+
+    [Header("Power Up Manager")]
+    public GameObject powerUpManager;
+
+    [Header("PowerUps")]
     public GameObject netflix;
     public GameObject flatTire;
     public GameObject birthdayPresent;
@@ -18,7 +26,7 @@ public class RandomPowerup : MonoBehaviour
     public GameObject taxReturn;
     public GameObject lawsuitWin;
 
-
+    private List<GameObject> powerUpList;
     // Start is called before the first frame update
     void Start()
     {
@@ -46,6 +54,12 @@ public class RandomPowerup : MonoBehaviour
             transform.rotation = Random.rotation;
             int powerUP = Random.Range(0, numRandomPowerUps);
             GameObject pu = powerUpList[powerUP];
+            PowerUp script = pu.GetComponent<PowerUp>();
+            PowerUpManager manager = powerUpManager.GetComponent<PowerUpManager>();
+            manager.currentValueOfPowerUp = script.amount;
+            manager.currentDescOfPowerUp = script.powerUpDesc;    
+            manager.isDebuf = true;
+            
         }
     }
 }
