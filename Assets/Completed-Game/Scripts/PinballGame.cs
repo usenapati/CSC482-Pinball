@@ -2,6 +2,7 @@
 
 // Include the namespace required to use Unity UI
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class PinballGame : MonoBehaviour
 {
@@ -58,12 +59,28 @@ public class PinballGame : MonoBehaviour
         audioPlayer.Play(); 
     }
 
+    void OnPlunger()
+    {
+        Debug.Log("Plunger");
+        Plunger();
+    }
+
+    void OnNewGame()
+    {
+        NewGame();
+    }
+
+    void OnChangeCameras()
+    {
+        switchCamera();
+    }
+
     private void Update()
     {
 
-        if (Input.GetKey(newGameKey) == true) NewGame();
-        if (Input.GetKey(plungerKey) == true) Plunger();
-        if (Input.GetKey(puzzlecameraKey) == true) switchCamera();
+        //if (Input.GetKey(newGameKey) == true) NewGame();
+        //if (Input.GetKey(plungerKey) == true) Plunger();
+        //if (Input.GetKey(puzzlecameraKey) == true) switchCamera();
 
         // detect ball going past flippers into "drain"
         if ((ball.activeSelf == true) && (ball.transform.position.z < drain.transform.position.z))
