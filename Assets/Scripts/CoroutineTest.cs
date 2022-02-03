@@ -9,7 +9,6 @@ public class CoroutineTest : MonoBehaviour
     public int insurance;
     public int rent;
     public int groceries;
-    public int 
 
     private int numWeeks = 4;
     private int currWeek = 1;
