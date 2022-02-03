@@ -112,6 +112,7 @@ MonoBehaviour:
   currentPowerUpValue: 0
   currentPowerUpDesc: 
   powerUpManager: {fileID: 0}
+  RespawnTime: 45
   netflix: {fileID: 0}
   flatTire: {fileID: 0}
   birthdayPresent: {fileID: 0}

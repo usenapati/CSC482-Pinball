@@ -45,7 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentDeduction: 0
   deductionDescription: 
-  weekTimer: 10
+  weekTimer: 45
   insurance: 40
   insuranceDesc: You must pay for Insurance for this month. Lose 40 dollars!
   rent: 50

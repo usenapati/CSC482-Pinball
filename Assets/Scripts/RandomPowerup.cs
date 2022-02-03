@@ -14,6 +14,8 @@ public class RandomPowerup : MonoBehaviour
     [Header("Power Up Manager")]
     public GameObject powerUpManager;
 
+    public int RespawnTime;
+
     [Header("PowerUps")]
     public GameObject netflix;
     public GameObject flatTire;
@@ -59,6 +61,9 @@ public class RandomPowerup : MonoBehaviour
             manager.currentValueOfPowerUp = script.amount;
             manager.currentDescOfPowerUp = script.powerUpDesc;    
             manager.isDebuf = true;
+            GetComponent<Collider>().enabled = false;
+            GetComponent<MeshRenderer>().enabled = false;
+            new WaitForSeconds(RespawnTime);
             
         }
     }

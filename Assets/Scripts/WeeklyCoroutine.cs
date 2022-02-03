@@ -25,6 +25,10 @@ public class WeeklyCoroutine : MonoBehaviour
     private int numWeeks = 4;                   //the number of weeks in a month
     private int currWeek = 1;                   //the current week we are on
 
+    private void Start()
+    {
+        startWeeklyCoroutine();
+    }
     public void startWeeklyCoroutine()          //this method can be called to start the coroutine
     {
         StartCoroutine(weeklyCoroutine(null));
@@ -37,7 +41,7 @@ public class WeeklyCoroutine : MonoBehaviour
 
     IEnumerator weeklyCoroutine(Transform target)
     {
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(weekTimer);
         while (true)
         {
             switch (currWeek)
@@ -65,24 +69,28 @@ public class WeeklyCoroutine : MonoBehaviour
 
     private void weekOne()
     {
+        Debug.Log("deducting week one cost");
         currentDeduction = rent;
         deductionDescription = rentDesc;
     }
 
     private void weekTwo()
     {
+        Debug.Log("deducting week two cost");
         currentDeduction = insurance;
         deductionDescription = insuranceDesc;
     }
 
     private void weekThree()
     {
+        Debug.Log("deducting week three cost");
         currentDeduction = groceries;
         deductionDescription = groceriesDesc;
     }
 
     private void weekFour()
     {
+        Debug.Log("deducting week four cost");
         currentDeduction = carPayment;
         deductionDescription = carPaymentDesc;
     }
