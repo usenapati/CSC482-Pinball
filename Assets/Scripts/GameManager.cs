@@ -135,7 +135,13 @@ public class GameManager : MonoBehaviour
     // PAUSE MODE
     public void pauseState()
     {
-
+        // Set TimeScale to 0
+        // Open UI
+    }
+    public void unpauseState()
+    {
+        // Set TimeScale to 1
+        // Open UI
     }
 
     // GAMEPLAY
