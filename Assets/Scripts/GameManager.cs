@@ -6,11 +6,25 @@ using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
+    public enum gameState
+    {
+        startGameState,                         // Reset points, lives, multiplier, ball save, etc. -> startRoundState
+        startRoundState,                        // Reset multiplier, ball save/extra save, tilt, multiball. -> pullPlungerState
+        pullPlungerState,                       // Wait for player to pull plunger. -> playRoundState
+        playRoundState,                         // Start round, update score, check if balls = 0. -> endRoundState || -> pauseState
+        endRoundState,                          // Life - 1, check if life >= 0. -> startRoundState || -> endGameState
+        endGameState,                           // Calculate final score, option to buy ball with scalinng costs(Life + 1). -> startRoundState || startGameState || Exit Game
+        pauseState,                             // Pauses the game. -> playRoundState || -> Exit Game
+
+
+    }
+
     [Header("Score is saved with this name")]
     public string BestScoreName = "BestScore";
 
 
     private bool b_paused = false;
+    private gameState e_gameState = gameState.startGameState;
 
     // Gameplay Variables
     [Header("Game Objects")]
@@ -31,6 +45,12 @@ public class GameManager : MonoBehaviour
     // Bumpers
     [Header("Bumpers")]
     public GameObject[] bumpers;
+
+    // Targets
+
+    // Drop Targets
+
+    // 
 
 
     [Header("Player Life and Score")]
@@ -98,7 +118,7 @@ public class GameManager : MonoBehaviour
     // SFX
     [Header("Audio : Sfx")]
     private AudioSource sound;
-    public AudioClip s_Load_Ball;					// play a sound when the ball respawn
+    public AudioClip a_Load_Ball;				// play a sound when the ball respawn
     public AudioClip a_LoseBall;                // Play a sound when the player lose a ball
     public AudioClip a_Bonus_Screen;			// Play a sound during the bonus score 
     public AudioClip a_GameOver;			    // Play a sound during the bonus score 
@@ -123,47 +143,115 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        switch (e_gameState)
+        {
+            // State Machine Loop
+            case gameState.startGameState:
+                startGameState();
+                break;
+            case gameState.startRoundState:
+                startRoundState();
+                break;
+            case gameState.pullPlungerState:
+                pullPlungerState();
+                break;
+            case gameState.playRoundState:
+                playRoundState();
+                break;
+            case gameState.endRoundState:
+                endRoundState();
+                break;
+            case gameState.endGameState:
+                endGameState();
+                break;
+            case gameState.pauseState:
+                pauseState();
+                break;
 
+            default:
+                break;
+        }
     }
 
     // START STATE
-    public void startState()
+    private void startGameState()
     {
-        // Reset Scores and Lives
+        // Reset Scores, Multiplier, and Lives
     }
-
-    // PAUSE MODE
-    public void pauseState()
+    private void startRoundState()
     {
-        // Set TimeScale to 0
-        // Open UI
-    }
-    public void unpauseState()
-    {
-        // Set TimeScale to 1
-        // Open UI
+        // Reset Round score, Ball Save, Extra Ball, Multiball
     }
 
     // GAMEPLAY
-    public void gamePlayState()
+    private void pullPlungerState()
     {
-
+        // Enable Plunger
     }
 
-    public void multiBallState()
+    private void playRoundState()
+    {
+        // Disable Plunger, Start Coroutines, Check Ball Save Timer, Check if Balls == 0, Add Expneses to Round Score, Check Multiball conditions (Add ball when true and set false
+    }
+
+    private void multiBallState()
     {
 
     }
 
     // GAME OVER STATE
-    public void gameOverState()
+    private void endRoundState()
     {
 
+    }
+    private void endGameState()
+    {
+
+    }
+
+    // PAUSE MODE
+    public void pauseState()
+    {
+        //if (gameIsPaused && !endOfGame)
+        //{
+        //Debug.Log("PAUSED");
+        //Display Pause Menu
+        //FindObjectOfType<UIManager>().showPaused();
+        //FindObjectOfType<UIManager>().hideUI();
+        Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.Confined;
+        // Pause Audio
+        //}
+        //else if (!gameIsPaused && !endOfGame)
+        //{
+        //Debug.Log("UNPAUSED");
+        //Hide Pause Menu
+        //FindObjectOfType<UIManager>().hidePaused();
+        //FindObjectOfType<UIManager>().showUI();
+        Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.Locked;
+        // Unpause Audio
+        //}
+        // Set TimeScale to 0
+        // Open UI
     }
 
     // DEBUG
     public void debugPauseState()
     {
 
+    }
+    // EXIT GAME
+    // UI MANAGER could use this
+    public void ExitOnClick()
+    {
+        Debug.Log("Exit Button clicked");
+#if UNITY_EDITOR
+        // Application.Quit() does not work in the editor so
+        // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+         Application.Quit();
+#endif
     }
 }
