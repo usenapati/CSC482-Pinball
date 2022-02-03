@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class FlipperController : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class FlipperController : MonoBehaviour
     public float hitStrength = 20000f;
     public float flipperDamper = 100f;
     public KeyCode inputKey;
+
+    private bool pressed = false;
 
     HingeJoint hinge;
 
@@ -23,6 +26,19 @@ public class FlipperController : MonoBehaviour
         hinge.useSpring = true;
     }
 
+    public void Flippers(InputAction.CallbackContext context)
+    {
+        float pressedAmt = context.ReadValue<float>();
+        if (pressedAmt > 0)
+        {
+            pressed = true;
+        }
+        else
+        {
+            pressed = false;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -30,7 +46,7 @@ public class FlipperController : MonoBehaviour
         spring.spring = hitStrength;
         spring.damper = flipperDamper;
 
-        if (Input.GetKey(inputKey) == true)
+        if (pressed)
         {
             spring.targetPosition = pressedPosition;
         }
