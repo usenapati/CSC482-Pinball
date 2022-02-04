@@ -24,8 +24,8 @@ public class GameManager : MonoBehaviour
     public int highScore = 0;
 
 
-    private bool b_paused = false;
-    private bool b_playerResponse = false;
+    //private bool b_paused = false;
+    private bool b_playerResponse = false;      // Updates when the player presses a button
     private gameState e_gameState = gameState.startGameState;
 
     // Gameplay Variables
@@ -50,8 +50,12 @@ public class GameManager : MonoBehaviour
     public GameObject[] bumpers;
 
     // Targets
+    [Header("Targets")]
+    public GameObject[] targets;
 
-    // Drop Targets
+    // Drop Bumpers
+    [Header("Drop Bumpers")]
+    public GameObject[] dropBumpers;
 
     // Round Info
     [Header("Round Info")]
@@ -62,7 +66,7 @@ public class GameManager : MonoBehaviour
     // End Game Variables
     private bool buyBall = false;               // Does the player want to buy a ball after the rounds are over
     private int ballCost = 100;
-    private bool b_newGame = false;
+    private bool b_newGame = false;             // bool val for button clicks
     private bool b_exitGame = false;
 
 
@@ -113,15 +117,15 @@ public class GameManager : MonoBehaviour
     // UI
     [Header("UI ")]
     [Header("Board Text")]
-    private Text GUI_Txt_Timer;
-    private Text GUI_Txt_Info_Ball;
-    private Text GUI_Txt_Score;
+    private Text GUI_Txt_Timer;                 // Not Sure, Could be Week Timer, Ball Save, Multi Ball
+    private Text GUI_Txt_Info_Ball;             // Events
+    private Text GUI_Txt_Score;                 // Score
 
     // Use to display text on LCD screen
-    public string[] arr_Info_Txt;
+    public string[] arr_Info_Txt;               // Store Events
     private float tmp_Time;
-    private float TimeBetweenTwoInfo;
-    private bool b_Txt_Info = true;
+    private float TimeBetweenTwoInfo;           // Revert Text after timer is over
+    private bool b_Txt_Info = true;             
 
     [Header("Text used during game")]
     public string[] Txt_Game;                   // Array : All the text use by the game Manager
@@ -258,11 +262,14 @@ public class GameManager : MonoBehaviour
         {
             if (roundScore[currentRound - 1] >= 0 && b_ballSaver)
             {
+                // Add Hit Counter to Global Hit Counter and Add to Round Score
 
                 // Add Expenses to Round Score
 
                 // Check Multiball conditions (Add ball when true and set multiball bool to false)
                 // Check Tilts
+
+                // Update UI
             }
             else
             {
@@ -367,37 +374,14 @@ public class GameManager : MonoBehaviour
     }
 
     // PAUSE MODE
-    public void pauseState()
-    {
-        //if (gameIsPaused && !endOfGame)
-        //{
-        //Debug.Log("PAUSED");
-        //Display Pause Menu
-        //FindObjectOfType<UIManager>().showPaused();
-        //FindObjectOfType<UIManager>().hideUI();
-        //Time.timeScale = 0f;
-        //Cursor.lockState = CursorLockMode.Confined;
-        // Pause Audio
-        //}
-        //else if (!gameIsPaused && !endOfGame)
-        //{
-        //Debug.Log("UNPAUSED");
-        //Hide Pause Menu
-        //FindObjectOfType<UIManager>().hidePaused();
-        //FindObjectOfType<UIManager>().showUI();
-        //Time.timeScale = 1f;
-        //Cursor.lockState = CursorLockMode.Locked;
-        // Unpause Audio
-        //}
-        // Set TimeScale to 0
-        // Open UI
-    }
+    //public void pauseState()
+    //{
+    //}
 
     // DEBUG
-    public void debugPauseState()
-    {
-
-    }
+    //public void debugPauseState()
+    //{
+    //}
 
     // EXIT GAME
     // UI MANAGER could use this
