@@ -191,22 +191,21 @@ public class GameManager : MonoBehaviour
 
     private void playRoundState()
     {
-        // Disable Plunger, Start Coroutines, Check Ball Save Timer, Check if Balls == 0, Add Expneses to Round Score, Check Multiball conditions (Add ball when true and set false
+        // Disable Plunger, Start Coroutines, Check Ball Save Timer, Check if Balls == 0, Add Expneses to Round Score, Check Multiball conditions (Add ball when true and set multiball bool to false)
     }
 
-    private void multiBallState()
-    {
-
-    }
-
+  
     // GAME OVER STATE
     private void endRoundState()
     {
-
+        // Subtract Life
+        // Check Life > 0: True - Next Round False - End Game
     }
     private void endGameState()
     {
-
+        // Calculate Final Score
+        // Ask Player if they want to buy ball or save final score
+        // If buy ball, then increase ball cost
     }
 
     // PAUSE MODE
