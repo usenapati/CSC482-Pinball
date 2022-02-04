@@ -2,18 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CircleBumper : MonoBehaviour
+public class TriBumper : MonoBehaviour
 {
-
     public float forceAmount = 30f;
 
     void OnCollisionEnter(Collision other)
     {
-        Debug.Log("Colliding");
+        Debug.Log("Tri Collide");
         if (other.gameObject.CompareTag("Ball"))
         {
-            Debug.Log("Explosion Force");
-            other.rigidbody.AddExplosionForce(forceAmount, transform.position, 3f, 0, ForceMode.Impulse);
+            Debug.Log ("APPLYING MASSIVE FORCE");
+            other.rigidbody.AddForce(transform.right * forceAmount, ForceMode.Impulse);
         }
     }
 }
