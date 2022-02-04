@@ -20,10 +20,12 @@ public class GameManager : MonoBehaviour
     }
 
     [Header("Score is saved with this name")]
-    public string BestScoreName = "BestScore";
+    public string highScoreName = "BestScore";
+    public int highScore = 0;
 
 
     private bool b_paused = false;
+    private bool b_playerResponse = false;
     private gameState e_gameState = gameState.startGameState;
 
     // Gameplay Variables
@@ -34,6 +36,7 @@ public class GameManager : MonoBehaviour
     [Header("Plunger")]
     private GameObject spawnBall;               // (connected automatically) The GameObject that manage the ejection after a ball respawn
     public GameObject plunger;
+    private bool b_pullPlunger = false;         // Has the player pulled the plunger
 
     [Header("Drain")]
     public GameObject drain;
@@ -50,18 +53,24 @@ public class GameManager : MonoBehaviour
 
     // Drop Targets
 
-    // 
-
     // Round Info
     [Header("Round Info")]
+    // Start Game Variables
     private bool roundStart = false;
+    private int currentRound = 0;               // Current Round
+
+    // End Game Variables
+    private bool buyBall = false;               // Does the player want to buy a ball after the rounds are over
+    private int ballCost = 100;
+    private bool b_newGame = false;
+    private bool b_exitGame = false;
 
 
     [Header("Player Life and Score")]
-    public static int Lives = 3;                       // Max Lives
+    public static int Lives = 3;                // Max Lives
     private int currentLives = 3;               // Current Lives
     private int weeksTimer = 1;                 // Track weeks the player has completed
-    private int[] roundScore = new int[Lives];                 // Score during a round
+    private List<int> roundScore = new List<int>(Lives);               // Score during a round
     private int playerScore = 0;                // Player Score
     private int numBall = 0;                    // The number of balls played by the player
     private bool b_startGame = false;           // True : Player start the game . False : Game is over
@@ -86,8 +95,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Bonus Ball Saver")]
     public bool b_ballSaver = false;            // True : Ball Saver is enabled
-    public int startDuration = -1;                 
-    
+    public int startDuration = -1;
+
 
     [Header("Bonus Multiplier")]                // Bonus Multiplier = multiplier x hitCounter + mulitplierSuperBonus)
     public int multiplier = 1;                  // multiplier could be x1 x2 x4 x6 x 8 x10							
@@ -125,10 +134,10 @@ public class GameManager : MonoBehaviour
     public AudioClip a_LoadBall;				// play a sound when the ball respawn
     public AudioClip a_LoseBall;                // Play a sound when the player lose a ball
     public AudioClip a_BonusScreen; 			// Play a sound during the bonus score 
-    public AudioClip a_GameOver;			    // Play a sound during the bonus score 
-    
+    public AudioClip a_GameOver;                // Play a sound during the bonus score 
 
-    
+
+
 
 
 
@@ -136,14 +145,18 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         // Find all Game Objects and Managers
+        // Ball
+        // Flippers
+        // Bumpers
         // Plunger 
         plunger = GameObject.FindGameObjectWithTag("Plunger");
         plunger.GetComponent<Plunger>().enabled = false;
 
-        // Set Active to false on Game Objects
+        // Set Active to false on Game Objects (???)
 
         // Play Audio
 
+        e_gameState = gameState.startGameState;
     }
 
     // Update is called once per frame
@@ -183,24 +196,35 @@ public class GameManager : MonoBehaviour
     private void startGameState()
     {
         // Reset Scores, Multiplier, and Lives
+        currentRound = 0;
         playerScore = 0;
-        roundScore = 0;
+        for (int i = 0; i < roundScore.Count; i++)
+        {
+            roundScore[i] = 0;
+        }
         weeksTimer = 0; // Set to WeeklyCoroutine.Week
         numBall = 0;
         multiplier = 1;
         hitCounter = 0;
         currentLives = 3;
+        e_gameState = gameState.startRoundState;
     }
     private void startRoundState()
     {
+        // Reset Ball Save, Extra Ball, Multiball, Tilt
         roundStart = false;
-        // Reset Round score, Ball Save, Extra Ball, Multiball, Tilt
-        roundScore = 0;
         multiplier = 1;
         b_ballSaver = true;
         // Extra Ball
         b_mutiBallState = false;
         tilts = 0;
+        // Enable Flippers
+        foreach (GameObject flipper in flippers)
+        {
+            flipper.GetComponent<FlipperController>().enabled = true;
+        }
+        // Switch to Pull Plunger State
+        e_gameState = gameState.pullPlungerState;
     }
 
     // GAMEPLAY
@@ -210,7 +234,11 @@ public class GameManager : MonoBehaviour
 
         // Enable Plunger
         plunger.GetComponent<Plunger>().enabled = true;
-        // When plunger is pulled, switch to playRoundState
+        // When plunger is pulled, switch to Play Round State
+        if (b_pullPlunger)
+        {
+            e_gameState = gameState.playRoundState;
+        }
     }
 
     private void playRoundState()
@@ -222,23 +250,48 @@ public class GameManager : MonoBehaviour
 
             // Start Coroutines
             CoroutineManager.GetComponent<WeeklyCoroutine>().startWeeklyCoroutine();
-            roundStart = false;
+            roundStart = true;
         }
 
         // Check if Balls == 0
-
-        // Check Ball Save Timer
-        if (b_ballSaver)
+        if (ballsOnBoard > 0)
         {
-            // Spawn Ball
-            // Switch to Plunger State
+            if (roundScore[currentRound - 1] >= 0 && b_ballSaver)
+            {
+
+                // Add Expenses to Round Score
+
+                // Check Multiball conditions (Add ball when true and set multiball bool to false)
+                // Check Tilts
+            }
+            else
+            {
+                // Check if money equals 0 after ball saver is false: True - Disable Flipper Movement False - Continue
+                foreach (GameObject flipper in flippers)
+                {
+                    flipper.GetComponent<FlipperController>().enabled = false;
+                }
+            }
         }
-        // Add Expenses to Round Score
-        // Check Multiball conditions (Add ball when true and set multiball bool to false)
-        // Check if money equals 0 after ball saver is false: True - Disable Flipper Movement False - Continue
+        else
+        {
+            // Check Ball Save Timer
+            if (b_ballSaver)
+            {
+                // Switch to Plunger State
+                e_gameState = gameState.pullPlungerState;
+            }
+            else
+            {
+                // Switch to End Round State
+                e_gameState = gameState.endRoundState;
+            }
+        }
+
+
     }
 
-  
+
     // GAME OVER STATE
     private void endRoundState()
     {
@@ -251,18 +304,66 @@ public class GameManager : MonoBehaviour
         // Check Life > 0: True - Next Round False - End Game
         if (currentLives <= 0)
         {
-
+            // Switch to End Game State
+            e_gameState = gameState.endGameState;
         }
         else
         {
-
+            // Switch to Start Round State
+            currentRound++;
+            e_gameState = gameState.startRoundState;
         }
     }
     private void endGameState()
     {
         // Calculate Final Score
+        for (int i = 0; i < roundScore.Count; i++)
+        {
+            playerScore += roundScore[i];
+        }
+
+        // Compare Final Score to Best Score
+        if (highScore < playerScore)
+        {
+            // Set Text to "New High Score"
+            highScore = playerScore;
+        }
         // Ask Player if they want to buy ball or save final score
-        // If buy ball, then increase ball cost
+        if (playerScore > ballCost)
+        {
+            if (b_playerResponse && buyBall)
+            {
+                roundScore[currentRound] -= ballCost;
+                // If buy ball, then increase ball cost
+                ballCost *= 10;
+                currentLives++;
+                currentRound++;
+                roundScore.Add(0);          // Add 0 to round scores, {x, y, z, 0}
+
+                e_gameState = gameState.startRoundState;
+            }
+            else if (b_playerResponse && !buyBall)
+            {
+                e_gameState = gameState.startGameState;
+            }
+        }
+        else
+        {
+            // If save final score, ask Player if they want to start a new game or exit
+            if (b_playerResponse && b_newGame)
+            {
+                e_gameState = gameState.startGameState;
+                b_newGame = false;
+            }
+            else if (b_playerResponse && b_exitGame)
+            {
+                ExitOnClick();
+            }
+        }
+
+
+
+
     }
 
     // PAUSE MODE
