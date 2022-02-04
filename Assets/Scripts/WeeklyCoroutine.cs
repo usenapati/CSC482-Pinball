@@ -9,6 +9,7 @@ public class WeeklyCoroutine : MonoBehaviour
     [Header("Final Values for GameManager")]
     public int currentDeduction;                //the current value of the weekly deduction to be subtracted from the player's score
     public string deductionDescription = "";    //the description of the deduction
+    public int currentWeek;
 
     [Header("Values for weekly deductions")]
     public float weekTimer;                     //the amount of time a week will last
@@ -27,7 +28,8 @@ public class WeeklyCoroutine : MonoBehaviour
 
     private void Start()
     {
-        startWeeklyCoroutine();
+        currentWeek = 1;
+        //startWeeklyCoroutine();
     }
     public void startWeeklyCoroutine()          //this method can be called to start the coroutine
     {
@@ -48,18 +50,22 @@ public class WeeklyCoroutine : MonoBehaviour
             {
                 case 1:
                     weekOne();
+                    currentWeek = 1;
                     currWeek++;
                     break;
                 case 2:
                     weekTwo();
+                    currentWeek = 2;
                     currWeek++;
                     break;
                 case 3:
                     weekThree();
+                    currentWeek = 3;
                     currWeek++;
                     break;
                 case 4:
                     weekFour();
+                    currentWeek = 4;
                     currWeek = 1;
                     break;
             }
