@@ -23,7 +23,14 @@ public class Teleport : MonoBehaviour
             other.transform.rotation = destination.transform.rotation;
             new WaitForSeconds(teleportDelay);
             other.gameObject.GetComponent<MeshRenderer>().enabled = true;
-            other.GetComponent<Rigidbody>().AddForce(transform.forward * forceAmount, ForceMode.Impulse);
+            other.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            other.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            other.GetComponent<Rigidbody>().AddForce(destination.transform.forward * forceAmount, ForceMode.Impulse);
         }
+    }
+
+    IEnumerator teleportCoroutine()
+    {
+        return null;
     }
 }
