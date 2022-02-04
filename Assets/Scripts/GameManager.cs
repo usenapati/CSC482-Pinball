@@ -52,15 +52,19 @@ public class GameManager : MonoBehaviour
 
     // 
 
+    // Round Info
+    [Header("Round Info")]
+    private bool roundStart = false;
+
 
     [Header("Player Life and Score")]
-    public int Lives = 3;                       // Max Lives
-    private int weeksCompleted = 0;             // Track weeks the player has completed
-    private int currentLives = 0;               // Current Lives
-    private int roundScore = 0;                 // Score during a round
+    public static int Lives = 3;                       // Max Lives
+    private int currentLives = 3;               // Current Lives
+    private int weeksTimer = 1;                 // Track weeks the player has completed
+    private int[] roundScore = new int[Lives];                 // Score during a round
     private int playerScore = 0;                // Player Score
-    private int numBall;                        // The number of ballss played by the player
-    private bool b_startGame;                   // True : Player start the game . False : Game is over
+    private int numBall = 0;                    // The number of balls played by the player
+    private bool b_startGame = false;           // True : Player start the game . False : Game is over
 
     [Header("Coroutine Manager")]
     GameObject CoroutineManager;                // Update GameObject to class
@@ -71,19 +75,19 @@ public class GameManager : MonoBehaviour
     private int tilts = 0;				        // 0 : Tilt Deactivate	 	1 : Player shakes the playfield			2 : Tilt Mode Enable  
 
     [Header("Mode Multi Ball")]
-    public GameObject obj_MultiBall;             // Object that manage the multi-ball on playfield. Manage how the ball is ejected on playfield
+    public GameObject obj_MultiBall;            // Object that manage the multi-ball on playfield. Manage how the ball is ejected on playfield
     public MultiBall multiBall;                 // Access MultiBall component from obj_Launcher_MultiBall gameObject;
     private int ballsOnBoard = 0;               // Know the number of board. 
-    private bool b_mutiBallState = false;         // Mode Multi ball activate or not
+    private bool b_mutiBallState = false;       // Mode Multi ball activate or not
     private int maxBallsSpawn = 3;              // Number of Balls in muti ball mode
 
     [Header("Bonus Extra Ball")]
-    public bool extraBall = false;
+    public bool b_extraBall = false;
 
     [Header("Bonus Ball Saver")]
-    public bool b_startGameWithBallSaver = false; // If true : player start a new ball with BallSaver
-    public int startDuration = -1;
-    public bool b_ballSaver = false;              // True : Ball Saver is enabled
+    public bool b_ballSaver = false;            // True : Ball Saver is enabled
+    public int startDuration = -1;                 
+    
 
     [Header("Bonus Multiplier")]                // Bonus Multiplier = multiplier x hitCounter + mulitplierSuperBonus)
     public int multiplier = 1;                  // multiplier could be x1 x2 x4 x6 x 8 x10							
@@ -118,9 +122,9 @@ public class GameManager : MonoBehaviour
     // SFX
     [Header("Audio : Sfx")]
     private AudioSource sound;
-    public AudioClip a_Load_Ball;				// play a sound when the ball respawn
+    public AudioClip a_LoadBall;				// play a sound when the ball respawn
     public AudioClip a_LoseBall;                // Play a sound when the player lose a ball
-    public AudioClip a_Bonus_Screen;			// Play a sound during the bonus score 
+    public AudioClip a_BonusScreen; 			// Play a sound during the bonus score 
     public AudioClip a_GameOver;			    // Play a sound during the bonus score 
     
 
@@ -131,10 +135,12 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Find all Game Objects
+        // Find all Game Objects and Managers
+        // Plunger 
+        plunger = GameObject.FindGameObjectWithTag("Plunger");
+        plunger.GetComponent<Plunger>().enabled = false;
 
         // Set Active to false on Game Objects
-
 
         // Play Audio
 
@@ -177,29 +183,80 @@ public class GameManager : MonoBehaviour
     private void startGameState()
     {
         // Reset Scores, Multiplier, and Lives
+        playerScore = 0;
+        roundScore = 0;
+        weeksTimer = 0; // Set to WeeklyCoroutine.Week
+        numBall = 0;
+        multiplier = 1;
+        hitCounter = 0;
+        currentLives = 3;
     }
     private void startRoundState()
     {
-        // Reset Round score, Ball Save, Extra Ball, Multiball
+        roundStart = false;
+        // Reset Round score, Ball Save, Extra Ball, Multiball, Tilt
+        roundScore = 0;
+        multiplier = 1;
+        b_ballSaver = true;
+        // Extra Ball
+        b_mutiBallState = false;
+        tilts = 0;
     }
 
     // GAMEPLAY
     private void pullPlungerState()
     {
+        // Spawn Ball
+
         // Enable Plunger
+        plunger.GetComponent<Plunger>().enabled = true;
+        // When plunger is pulled, switch to playRoundState
     }
 
     private void playRoundState()
     {
-        // Disable Plunger, Start Coroutines, Check Ball Save Timer, Check if Balls == 0, Add Expneses to Round Score, Check Multiball conditions (Add ball when true and set multiball bool to false)
+        if (!roundStart)
+        {
+            // Disable Plunger
+            plunger.GetComponent<Plunger>().enabled = false;
+
+            // Start Coroutines
+            CoroutineManager.GetComponent<WeeklyCoroutine>().startWeeklyCoroutine();
+            roundStart = false;
+        }
+
+        // Check if Balls == 0
+
+        // Check Ball Save Timer
+        if (b_ballSaver)
+        {
+            // Spawn Ball
+            // Switch to Plunger State
+        }
+        // Add Expenses to Round Score
+        // Check Multiball conditions (Add ball when true and set multiball bool to false)
+        // Check if money equals 0 after ball saver is false: True - Disable Flipper Movement False - Continue
     }
 
   
     // GAME OVER STATE
     private void endRoundState()
     {
+        // Stop Coroutines
+        CoroutineManager.GetComponent<WeeklyCoroutine>().stopWeeklyCoroutine();
+
         // Subtract Life
+        currentLives--;
+
         // Check Life > 0: True - Next Round False - End Game
+        if (currentLives <= 0)
+        {
+
+        }
+        else
+        {
+
+        }
     }
     private void endGameState()
     {
@@ -217,8 +274,8 @@ public class GameManager : MonoBehaviour
         //Display Pause Menu
         //FindObjectOfType<UIManager>().showPaused();
         //FindObjectOfType<UIManager>().hideUI();
-        Time.timeScale = 0f;
-        Cursor.lockState = CursorLockMode.Confined;
+        //Time.timeScale = 0f;
+        //Cursor.lockState = CursorLockMode.Confined;
         // Pause Audio
         //}
         //else if (!gameIsPaused && !endOfGame)
@@ -227,8 +284,8 @@ public class GameManager : MonoBehaviour
         //Hide Pause Menu
         //FindObjectOfType<UIManager>().hidePaused();
         //FindObjectOfType<UIManager>().showUI();
-        Time.timeScale = 1f;
-        Cursor.lockState = CursorLockMode.Locked;
+        //Time.timeScale = 1f;
+        //Cursor.lockState = CursorLockMode.Locked;
         // Unpause Audio
         //}
         // Set TimeScale to 0
@@ -240,6 +297,7 @@ public class GameManager : MonoBehaviour
     {
 
     }
+
     // EXIT GAME
     // UI MANAGER could use this
     public void ExitOnClick()
