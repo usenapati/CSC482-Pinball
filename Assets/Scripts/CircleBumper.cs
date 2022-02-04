@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class CircleBumper : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    void OnCollisionEnter(Collision other)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Debug.Log("Colliding");
+        if (other.gameObject.CompareTag("Ball"))
+        {
+            Debug.Log("Explosion Force");
+            other.rigidbody.AddExplosionForce(30f, transform.position, 3f, 0, ForceMode.Impulse);
+        }
     }
 }
