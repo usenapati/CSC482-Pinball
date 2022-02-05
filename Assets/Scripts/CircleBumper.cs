@@ -5,7 +5,18 @@ using UnityEngine;
 public class CircleBumper : MonoBehaviour
 {
 
-    public float forceAmount = 30f;
+    public float forceAmount = 30f; 
+    public int hitCounter = 0;
+
+    private void Start()
+    {
+        hitCounter = 0;
+    }
+
+    public void resetCounter()
+    {
+        hitCounter = 0;
+    }
 
     void OnCollisionEnter(Collision other)
     {
@@ -14,6 +25,7 @@ public class CircleBumper : MonoBehaviour
         {
             Debug.Log("Explosion Force");
             other.rigidbody.AddExplosionForce(forceAmount, transform.position, 3f, 0, ForceMode.Impulse);
+            GameManager.Instance.hitCounter++;
         }
     }
 }

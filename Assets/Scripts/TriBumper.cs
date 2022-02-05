@@ -5,6 +5,17 @@ using UnityEngine;
 public class TriBumper : MonoBehaviour
 {
     public float forceAmount = 30f;
+    public int hitCounter = 0;
+
+    private void Start()
+    {
+        hitCounter = 0;
+    }
+
+    public void resetCounter()
+    {
+        hitCounter = 0;
+    }
 
     void OnCollisionEnter(Collision other)
     {
@@ -13,6 +24,7 @@ public class TriBumper : MonoBehaviour
         {
             Debug.Log ("APPLYING MASSIVE FORCE");
             other.rigidbody.AddForce(transform.right * forceAmount, ForceMode.Impulse);
+            GameManager.Instance.hitCounter++;
         }
     }
 }

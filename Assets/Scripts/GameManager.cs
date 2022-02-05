@@ -3,9 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    private static GameManager _instance;
+    public static GameManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                Debug.LogError("Game Manager is NULL");
+            }
+            return _instance;
+        }
+    }
+
+    private void Awake()
+    {
+        _instance = this;
+    }
+
     public enum gameState
     {
         startGameState,                         // Reset points, lives, multiplier, ball save, etc. -> startRoundState
@@ -14,8 +33,6 @@ public class GameManager : MonoBehaviour
         playRoundState,                         // Start round, update score, check if balls = 0. -> endRoundState || -> pauseState
         endRoundState,                          // Life - 1, check if life >= 0. -> startRoundState || -> endGameState
         endGameState,                           // Calculate final score, option to buy ball with scalinng costs(Life + 1). -> startRoundState || startGameState || Exit Game
-        pauseState,                             // Pauses the game. -> playRoundState || -> Exit Game
-
 
     }
 
@@ -52,10 +69,6 @@ public class GameManager : MonoBehaviour
     // Targets
     [Header("Targets")]
     public GameObject[] targets;
-
-    // Drop Bumpers
-    [Header("Drop Bumpers")]
-    public GameObject[] dropBumpers;
 
     // Round Info
     [Header("Round Info")]
@@ -117,9 +130,9 @@ public class GameManager : MonoBehaviour
     // UI
     [Header("UI ")]
     [Header("Board Text")]
-    private Text GUI_Txt_Timer;                 // Not Sure, Could be Week Timer, Ball Save, Multi Ball
-    private Text GUI_Txt_Info_Ball;             // Events
-    private Text GUI_Txt_Score;                 // Score
+    private TextMeshProUGUI GUI_Txt_Timer;                 // Not Sure, Could be Week Timer, Ball Save, Multi Ball
+    private TextMeshProUGUI GUI_Txt_Info_Ball;             // Events
+    public TextMeshProUGUI GUI_Txt_Score;                 // Score
 
     // Use to display text on LCD screen
     public string[] arr_Info_Txt;               // Store Events
@@ -149,12 +162,16 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         // Find all Game Objects and Managers
+        // Coroutine Manager
+        CoroutineManager.GetComponent<WeeklyCoroutine>();
         // Ball
         // Flippers
+        flippers = GameObject.FindGameObjectsWithTag("Flipper");
         // Bumpers
+        bumpers = GameObject.FindGameObjectsWithTag("Bumper");
         // Plunger 
-        plunger = GameObject.FindGameObjectWithTag("Plunger");
-        plunger.GetComponent<Plunger>().enabled = false;
+        //plunger = GameObject.FindGameObjectWithTag("Plunger");
+        //plunger.GetComponent<Plunger>().enabled = false;
 
         // Set Active to false on Game Objects (???)
 
@@ -166,6 +183,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(e_gameState);
         switch (e_gameState)
         {
             // State Machine Loop
@@ -187,10 +205,6 @@ public class GameManager : MonoBehaviour
             case gameState.endGameState:
                 endGameState();
                 break;
-            case gameState.pauseState:
-                pauseState();
-                break;
-
             default:
                 break;
         }
@@ -237,7 +251,7 @@ public class GameManager : MonoBehaviour
         // Spawn Ball
 
         // Enable Plunger
-        plunger.GetComponent<Plunger>().enabled = true;
+        //plunger.GetComponent<Plunger>().enabled = true;
         // When plunger is pulled, switch to Play Round State
         if (b_pullPlunger)
         {
@@ -250,7 +264,7 @@ public class GameManager : MonoBehaviour
         if (!roundStart)
         {
             // Disable Plunger
-            plunger.GetComponent<Plunger>().enabled = false;
+            //plunger.GetComponent<Plunger>().enabled = false;
 
             // Start Coroutines
             CoroutineManager.GetComponent<WeeklyCoroutine>().startWeeklyCoroutine();
@@ -263,6 +277,7 @@ public class GameManager : MonoBehaviour
             if (roundScore[currentRound - 1] >= 0 && b_ballSaver)
             {
                 // Add Hit Counter to Global Hit Counter and Add to Round Score
+                // Add Multiple to Hit Counter 
 
                 // Add Expenses to Round Score
 
@@ -270,6 +285,7 @@ public class GameManager : MonoBehaviour
                 // Check Tilts
 
                 // Update UI
+                GUI_Txt_Score.text = hitCounter.ToString();
             }
             else
             {
@@ -395,5 +411,11 @@ public class GameManager : MonoBehaviour
 #else
          Application.Quit();
 #endif
+    }
+
+    // BAD
+    public void pulledPlunger()
+    {
+        e_gameState = gameState.playRoundState;
     }
 }
