@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour
     public static int Lives = 3;                // Max Lives
     public int currentLives = 3;               // Current Lives
     private int weeksTimer = 1;                 // Track weeks the player has completed
-    public List<int> roundScore = new List<int>(Lives);               // Score during a round
+    //public List<int> roundScore;               // Score during a round
     private int playerScore = 0;                // Player Score
     public int numBall = 0;                    // The number of balls played by the player
     public bool b_startGame = false;           // True : Player start the game . False : Game is over
@@ -116,7 +116,7 @@ public class GameManager : MonoBehaviour
 
 
     [Header("Bonus Multiplier")]                // Bonus Multiplier = multiplier x hitCounter + mulitplierSuperBonus)
-    public int multiplier = 1;                  // multiplier could be x1 x2 x4 x6 x 8 x10							
+    public int multiplier = 10;                  // multiplier could be x1 x2 x4 x6 x 8 x10							
     public int mulitplierSuperBonus = 1000000;  // Add points if multiplier = 10
     public int hitCounter = 0;                  // Record the number of object that hit the ball during the current ball
 
@@ -130,9 +130,11 @@ public class GameManager : MonoBehaviour
     // UI
     [Header("UI ")]
     [Header("Board Text")]
-    private TextMeshProUGUI GUI_Txt_Timer;                 // Not Sure, Could be Week Timer, Ball Save, Multi Ball
-    private TextMeshProUGUI GUI_Txt_Info_Ball;             // Events
+    public TextMeshProUGUI GUI_Txt_Timer;                 // Week Timer
+    public TextMeshProUGUI GUI_Txt_Info_Event;            // Events
+    public TextMeshProUGUI GUI_Txt_Info_Cost;             // Event Cost
     public TextMeshProUGUI GUI_Txt_Score;                 // Score
+    public TextMeshProUGUI GUI_Txt_Lives;                 // Lives
 
     // Use to display text on LCD screen
     public string[] arr_Info_Txt;               // Store Events
@@ -161,6 +163,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //roundScore = new List<int>(Lives);
+
         // Find all Game Objects and Managers
         // Coroutine Manager
         CoroutineManager.GetComponent<WeeklyCoroutine>();
@@ -216,13 +220,13 @@ public class GameManager : MonoBehaviour
         // Reset Scores, Multiplier, and Lives
         currentRound = 0;
         playerScore = 0;
-        for (int i = 0; i < roundScore.Count; i++)
-        {
-            roundScore[i] = 0;
-        }
+        //for (int i = 0; i < Lives; i++)
+        //{
+        //    roundScore.Add(0);
+        //}
         weeksTimer = 0; // Set to WeeklyCoroutine.Week
         numBall = 0;
-        multiplier = 1;
+        multiplier = 10;
         hitCounter = 0;
         currentLives = 3;
         e_gameState = gameState.startRoundState;
@@ -230,9 +234,10 @@ public class GameManager : MonoBehaviour
     private void startRoundState()
     {
         // Reset Ball Save, Extra Ball, Multiball, Tilt
+        ballsOnBoard = 0;
         roundStart = false;
-        multiplier = 1;
-        b_ballSaver = true;
+        multiplier = 10;
+        b_ballSaver = false;
         // Extra Ball
         b_mutiBallState = false;
         tilts = 0;
@@ -256,9 +261,11 @@ public class GameManager : MonoBehaviour
         // When plunger is pulled, switch to Play Round State
         if (b_pullPlunger)
         {
-            ballsOnBoard = 1;
+            ballsOnBoard++;
             numBall++;
             e_gameState = gameState.playRoundState;
+            b_pullPlunger = false;
+            
         }
     }
 
@@ -278,18 +285,24 @@ public class GameManager : MonoBehaviour
         // Check if Balls == 0
         if (ballsOnBoard > 0)
         {
-            if (roundScore[currentRound] >= 0 && b_ballSaver)
+            if (playerScore >= 0 || b_ballSaver)
             {
+                // MAIN LOOP
                 // Add Hit Counter to Global Hit Counter and Add to Round Score
                 // Add Multiple to Hit Counter 
 
                 // Add Expenses to Round Score
+                
 
                 // Check Multiball conditions (Add ball when true and set multiball bool to false)
                 // Check Tilts
 
                 // Update UI
-                GUI_Txt_Score.text = hitCounter.ToString();
+                //playerScore = hitCounter * 10; // Multiplier
+                
+                
+                GUI_Txt_Score.text = playerScore.ToString();
+                GUI_Txt_Lives.text = currentLives.ToString();
             }
             else
             {
@@ -323,7 +336,11 @@ public class GameManager : MonoBehaviour
     private void endRoundState()
     {
         // Stop Coroutines
+        // One time call
         CoroutineManager.GetComponent<WeeklyCoroutine>().stopWeeklyCoroutine();
+
+        GUI_Txt_Score.text = playerScore.ToString();
+        GUI_Txt_Lives.text = currentLives.ToString();
 
         // Subtract Life
         currentLives--;
@@ -344,10 +361,9 @@ public class GameManager : MonoBehaviour
     private void endGameState()
     {
         // Calculate Final Score
-        for (int i = 0; i < roundScore.Count; i++)
-        {
-            playerScore += roundScore[i];
-        }
+
+        GUI_Txt_Score.text = playerScore.ToString();
+        GUI_Txt_Lives.text = currentLives.ToString();
 
         // Compare Final Score to Best Score
         if (highScore < playerScore)
@@ -360,12 +376,12 @@ public class GameManager : MonoBehaviour
         {
             if (b_playerResponse && buyBall)
             {
-                roundScore[currentRound] -= ballCost;
+                playerScore -= ballCost;
                 // If buy ball, then increase ball cost
                 ballCost *= 10;
                 currentLives++;
                 currentRound++;
-                roundScore.Add(0);          // Add 0 to round scores, {x, y, z, 0}
+                //roundScore.Add(0);          // Add 0 to round scores, {x, y, z, 0}
 
                 e_gameState = gameState.startRoundState;
             }
@@ -422,6 +438,51 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Pulled Plunger");
         b_pullPlunger = true;
-        e_gameState = gameState.playRoundState;
+        //e_gameState = gameState.playRoundState;
+    }
+    
+    public void lostBall()
+    {
+        Debug.Log("Fell into drain");
+        ballsOnBoard--;
+    }
+
+    public void deductWeeklyPlayerScore(int val, string description, int weekNum)
+    {
+        playerScore -= val;
+        GUI_Txt_Info_Event.text = description;
+        GUI_Txt_Info_Cost.text = "-$" + val.ToString();
+        GUI_Txt_Timer.text = weekNum.ToString();
+    }
+    
+    public void deductRandomPlayerScore(int val, string description, bool debuff)
+    {
+        if (debuff)
+        {
+            playerScore -= val;
+            GUI_Txt_Info_Cost.text = "-$" + val;
+        }
+        else
+        {
+            playerScore += val;
+            GUI_Txt_Info_Cost.text = "+$" + val;
+        }
+        GUI_Txt_Info_Event.text = description;
+        
+    }
+
+    public void addScore(int val)
+    {
+        playerScore += (int)Mathf.Ceil(val * multiplier); //not sure why had to cast here?
+    }
+
+    public void increaseMultiplier()
+    {
+        multiplier *= 2;
+    }
+
+    public void decreaseMultiplier()
+    {
+        multiplier /= 2;
     }
 }

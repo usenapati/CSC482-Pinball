@@ -24,7 +24,7 @@ public class TriBumper : MonoBehaviour
         {
             Debug.Log ("APPLYING MASSIVE FORCE");
             other.rigidbody.AddForce(transform.right * forceAmount, ForceMode.Impulse);
-            GameManager.Instance.hitCounter++;
+            GameManager.Instance.addScore(1);
         }
     }
 }

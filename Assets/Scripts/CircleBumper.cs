@@ -25,7 +25,7 @@ public class CircleBumper : MonoBehaviour
         {
             //Debug.Log("Explosion Force");
             other.rigidbody.AddExplosionForce(forceAmount, transform.position, 3f, 0, ForceMode.Impulse);
-            GameManager.Instance.hitCounter++;
+            GameManager.Instance.addScore(1);
         }
     }
 }
