@@ -15,8 +15,16 @@ public class DropBumper : MonoBehaviour
     private Vector3 targetPos;
     private Vector3 originalPos;
 
+    public int hitCounter = 0;
+
+    public void resetCounter()
+    {
+        hitCounter = 0;
+    }
+
     void Start()
     {
+        hitCounter = 0;
         originalPos = transform.position;
         targetPos = new Vector3(transform.position.x, transform.position.y - 10, transform.position.z);
     }
@@ -41,6 +49,7 @@ public class DropBumper : MonoBehaviour
             Debug.Log("Explosion Force");
             other.rigidbody.AddExplosionForce(forceAmount, transform.position, 3f, 0, ForceMode.Impulse);
             hit = true;
+            GameManager.Instance.hitCounter++;
 
             if (respawn)
             {

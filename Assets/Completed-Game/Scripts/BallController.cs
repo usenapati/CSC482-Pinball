@@ -29,7 +29,7 @@ public class BallController : MonoBehaviour
     void OnCollisionEnter(Collision myCollision)
     {
 
-        Debug.Log(myCollision.relativeVelocity.magnitude);
+        //Debug.Log(myCollision.relativeVelocity.magnitude);
         //only generate collision sound on harder hits
         if (myCollision.relativeVelocity.magnitude > 10)
         {

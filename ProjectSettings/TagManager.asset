@@ -7,6 +7,8 @@ TagManager:
   - Ball
   - Bumper
   - cylinder
+  - Flipper
+  - Drain
   layers:
   - Default
   - TransparentFX
