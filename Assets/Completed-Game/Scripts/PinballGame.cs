@@ -57,8 +57,8 @@ public class PinballGame : MonoBehaviour
 
     void OnPlunger()
     {
-        Debug.Log("Plunger");
-        GameManager.Instance.pulledPlunger();
+        //Debug.Log("Plunger");
+        
         Plunger();
     }
 
@@ -88,13 +88,17 @@ public class PinballGame : MonoBehaviour
         {
             ball.SetActive(true);
 
-            Rigidbody rb = ball.GetComponent<Rigidbody>();
-            Vector3 movement = new Vector3(0.0f, 0.0f, 1.0f);
-            rb.AddForce(movement * plungerSpeed);
+            
 
             // set ball position to location of plunger
             ball.transform.position = plunger.transform.position;
             ballsLeft = ballsLeft - 1;
+            
+            Rigidbody rb = ball.GetComponent<Rigidbody>();
+            Vector3 movement = new Vector3(0.0f, 0.0f, 1.0f);
+            rb.AddForce(movement * plungerSpeed);
+            GameManager.Instance.pulledPlunger();
+            Debug.Log("Pulled Plunger");
 
             audioPlayer.PlayOneShot(plungerClip);
         }

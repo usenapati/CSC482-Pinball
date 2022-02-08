@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
 
     //private bool b_paused = false;
     private bool b_playerResponse = false;      // Updates when the player presses a button
-    private gameState e_gameState = gameState.startGameState;
+    public gameState e_gameState = gameState.startGameState;
 
     // Gameplay Variables
     [Header("Game Objects")]
@@ -51,9 +51,9 @@ public class GameManager : MonoBehaviour
     public GameObject ball;                      // Connect the ball Prefab
 
     [Header("Plunger")]
-    private GameObject spawnBall;               // (connected automatically) The GameObject that manage the ejection after a ball respawn
+    public GameObject spawnBall;               // (connected automatically) The GameObject that manage the ejection after a ball respawn
     public GameObject plunger;
-    private bool b_pullPlunger = false;         // Has the player pulled the plunger
+    public bool b_pullPlunger = false;         // Has the player pulled the plunger
 
     [Header("Drain")]
     public GameObject drain;
@@ -73,27 +73,27 @@ public class GameManager : MonoBehaviour
     // Round Info
     [Header("Round Info")]
     // Start Game Variables
-    private bool roundStart = false;
-    private int currentRound = 0;               // Current Round
+    public bool roundStart = false;
+    public int currentRound = 0;               // Current Round
 
     // End Game Variables
-    private bool buyBall = false;               // Does the player want to buy a ball after the rounds are over
-    private int ballCost = 100;
-    private bool b_newGame = false;             // bool val for button clicks
-    private bool b_exitGame = false;
+    public bool buyBall = false;               // Does the player want to buy a ball after the rounds are over
+    public int ballCost = 100;
+    public bool b_newGame = false;             // bool val for button clicks
+    public bool b_exitGame = false;
 
 
     [Header("Player Life and Score")]
     public static int Lives = 3;                // Max Lives
-    private int currentLives = 3;               // Current Lives
+    public int currentLives = 3;               // Current Lives
     private int weeksTimer = 1;                 // Track weeks the player has completed
-    private List<int> roundScore = new List<int>(Lives);               // Score during a round
+    public List<int> roundScore = new List<int>(Lives);               // Score during a round
     private int playerScore = 0;                // Player Score
-    private int numBall = 0;                    // The number of balls played by the player
-    private bool b_startGame = false;           // True : Player start the game . False : Game is over
+    public int numBall = 0;                    // The number of balls played by the player
+    public bool b_startGame = false;           // True : Player start the game . False : Game is over
 
     [Header("Coroutine Manager")]
-    GameObject CoroutineManager;                // Update GameObject to class
+    public GameObject CoroutineManager;                // Update GameObject to class
 
     [Header("Tilt Mode")]
     public float minTimeTilt = 1;	            // Minimum time in seconds between two shake
@@ -103,7 +103,7 @@ public class GameManager : MonoBehaviour
     [Header("Mode Multi Ball")]
     public GameObject obj_MultiBall;            // Object that manage the multi-ball on playfield. Manage how the ball is ejected on playfield
     public MultiBall multiBall;                 // Access MultiBall component from obj_Launcher_MultiBall gameObject;
-    private int ballsOnBoard = 0;               // Know the number of board. 
+    public int ballsOnBoard = 0;               // Know the number of board. 
     private bool b_mutiBallState = false;       // Mode Multi ball activate or not
     private int maxBallsSpawn = 3;              // Number of Balls in muti ball mode
 
@@ -183,7 +183,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(e_gameState);
+        //Debug.Log(e_gameState);
         switch (e_gameState)
         {
             // State Machine Loop
@@ -242,6 +242,7 @@ public class GameManager : MonoBehaviour
             flipper.GetComponent<FlipperController>().enabled = true;
         }
         // Switch to Pull Plunger State
+        b_pullPlunger = false;
         e_gameState = gameState.pullPlungerState;
     }
 
@@ -255,12 +256,15 @@ public class GameManager : MonoBehaviour
         // When plunger is pulled, switch to Play Round State
         if (b_pullPlunger)
         {
+            ballsOnBoard = 1;
+            numBall++;
             e_gameState = gameState.playRoundState;
         }
     }
 
     private void playRoundState()
     {
+        Debug.Log("Play Round");
         if (!roundStart)
         {
             // Disable Plunger
@@ -274,7 +278,7 @@ public class GameManager : MonoBehaviour
         // Check if Balls == 0
         if (ballsOnBoard > 0)
         {
-            if (roundScore[currentRound - 1] >= 0 && b_ballSaver)
+            if (roundScore[currentRound] >= 0 && b_ballSaver)
             {
                 // Add Hit Counter to Global Hit Counter and Add to Round Score
                 // Add Multiple to Hit Counter 
@@ -416,6 +420,8 @@ public class GameManager : MonoBehaviour
     // BAD
     public void pulledPlunger()
     {
+        Debug.Log("Pulled Plunger");
+        b_pullPlunger = true;
         e_gameState = gameState.playRoundState;
     }
 }

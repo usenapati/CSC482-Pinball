@@ -20,10 +20,10 @@ public class CircleBumper : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
-        Debug.Log("Colliding");
+        //Debug.Log("Colliding");
         if (other.gameObject.CompareTag("Ball"))
         {
-            Debug.Log("Explosion Force");
+            //Debug.Log("Explosion Force");
             other.rigidbody.AddExplosionForce(forceAmount, transform.position, 3f, 0, ForceMode.Impulse);
             GameManager.Instance.hitCounter++;
         }
