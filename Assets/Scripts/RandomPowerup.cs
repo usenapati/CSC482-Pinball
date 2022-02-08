@@ -94,6 +94,8 @@ public class RandomPowerup : MonoBehaviour
         GetComponent<Collider>().enabled = false;
         GetComponent<MeshRenderer>().enabled = false;
 
+        GameManager.Instance.deductRandomPlayerScore(script.amount, script.powerUpDesc, script.debuf);
+
         yield return new WaitForSeconds(RespawnTime);
 
         GetComponent<Collider>().enabled = true;
