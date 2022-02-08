@@ -21,7 +21,7 @@ public class Drain : MonoBehaviour
         if (other.CompareTag("Ball"))
         {
             other.gameObject.SetActive(false);
-            GameManager.Instance.ballsOnBoard--;
+            GameManager.Instance.lostBall();
         }
     }
 }
