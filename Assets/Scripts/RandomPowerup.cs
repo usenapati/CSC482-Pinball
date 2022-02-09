@@ -14,6 +14,7 @@ public class RandomPowerup : MonoBehaviour
     [Header("Power Up Manager")]
     public GameObject powerUpManager;
 
+    public int idleRotateSpeed;
     public int rotateSpeed;
     public float spinTime;
     public int RespawnTime;
@@ -53,6 +54,7 @@ public class RandomPowerup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        transform.Rotate(new Vector3(30, 30, 30) * idleRotateSpeed * Time.deltaTime);
         if (spinning)
         {
             float x = Random.Range(-15, 90);
