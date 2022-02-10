@@ -5117,6 +5117,11 @@ PrefabInstance:
       propertyPath: birthdayPresent
       value: 
       objectReference: {fileID: 1804757209}
+    - target: {fileID: 5638792872178888184, guid: bd9f63993c26dbc48ace5811b91b7b26,
+        type: 3}
+      propertyPath: idleRotateSpeed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8292717695759307825, guid: bd9f63993c26dbc48ace5811b91b7b26,
         type: 3}
       propertyPath: m_Name
@@ -8679,6 +8684,11 @@ PrefabInstance:
       propertyPath: birthdayPresent
       value: 
       objectReference: {fileID: 1804757209}
+    - target: {fileID: 5638792872178888184, guid: bd9f63993c26dbc48ace5811b91b7b26,
+        type: 3}
+      propertyPath: idleRotateSpeed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8292717695759307825, guid: bd9f63993c26dbc48ace5811b91b7b26,
         type: 3}
       propertyPath: m_Name
@@ -11081,6 +11091,11 @@ PrefabInstance:
       propertyPath: birthdayPresent
       value: 
       objectReference: {fileID: 1804757209}
+    - target: {fileID: 5638792872178888184, guid: bd9f63993c26dbc48ace5811b91b7b26,
+        type: 3}
+      propertyPath: idleRotateSpeed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8292717695759307825, guid: bd9f63993c26dbc48ace5811b91b7b26,
         type: 3}
       propertyPath: m_Name
