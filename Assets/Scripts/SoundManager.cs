@@ -32,6 +32,8 @@ public class SoundManager : MonoBehaviour
 
     public AudioSource coinClink;
 
+    public AudioSource teleport;
+
     //Singleton Stuff
 
     private static SoundManager _instance;
@@ -133,5 +135,10 @@ public class SoundManager : MonoBehaviour
     public void playCoinClink()
     {
         coinClink.Play();
+    }
+
+    public void playTeleport()
+    {
+        teleport.Play();
     }
 }
