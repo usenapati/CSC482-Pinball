@@ -31,6 +31,7 @@ public class FlipperController : MonoBehaviour
         float pressedAmt = context.ReadValue<float>();
         if (pressedAmt > 0)
         {
+            SoundManager.Instance.playFlipper();
             pressed = true;
         }
         else
@@ -56,6 +57,11 @@ public class FlipperController : MonoBehaviour
         }
         hinge.spring = spring;
         hinge.useLimits = true;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        
     }
 
     void FixedUpdate()

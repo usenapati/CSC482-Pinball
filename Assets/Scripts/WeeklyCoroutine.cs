@@ -69,6 +69,7 @@ public class WeeklyCoroutine : MonoBehaviour
                     currWeek = 1;
                     break;
             }
+            SoundManager.Instance.playCoinClink();
             GameManager.Instance.deductWeeklyPlayerScore(currentDeduction, deductionDescription, currWeek);
             yield return new WaitForSeconds(weekTimer);
         }
