@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        SoundManager.Instance.playGameMusic();
         _instance = this;
     }
 
@@ -135,6 +136,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI GUI_Txt_Info_Cost;             // Event Cost
     public TextMeshProUGUI GUI_Txt_Score;                 // Score
     public TextMeshProUGUI GUI_Txt_Lives;                 // Lives
+    public TextMeshProUGUI GUI_Txt_BuyBallCost;                 // Lives
     public GameObject GUI_Game_Over;
 
     [Header("Button")]
@@ -238,6 +240,7 @@ public class GameManager : MonoBehaviour
     private void startRoundState()
     {
         btn_BuyBall.gameObject.SetActive(false);
+        GUI_Txt_BuyBallCost.gameObject.SetActive(false);
         // Reset Ball Save, Extra Ball, Multiball, Tilt
         ballsOnBoard = 0;
         roundStart = false;
@@ -460,6 +463,7 @@ public class GameManager : MonoBehaviour
 
     public void BuyBall()
     {
+        SoundManager.Instance.playCashRegister();
         playerScore -= ballCost;
         // If buy ball, then increase ball cost
         ballCost *= 2;
@@ -476,6 +480,7 @@ public class GameManager : MonoBehaviour
         GUI_Txt_Score.text = playerScore.ToString();
         GUI_Txt_Lives.text = currentLives.ToString();
         GUI_Game_Over.SetActive(true);
+        
 
         // Compare Final Score to Best Score
         if (highScore < playerScore)
@@ -486,7 +491,9 @@ public class GameManager : MonoBehaviour
         // Ask Player if they want to buy ball or save final score
         if (playerScore > ballCost)
         {
+            GUI_Txt_BuyBallCost.text = "Ball Cost: $" + ballCost.ToString();
             btn_BuyBall.gameObject.SetActive(true);
+            GUI_Txt_BuyBallCost.gameObject.SetActive(true);
         }
         else
         {
