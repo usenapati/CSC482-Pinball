@@ -77,6 +77,7 @@ public class RandomPowerup : MonoBehaviour
     {
         //Debug.Log("made it to coroutine");
         spinning = true;
+        SoundManager.Instance.playPowerUpPickup();
         yield return new WaitForSeconds(spinTime);
         spinning = false;
         Debug.Log("made it past first wait");
@@ -97,7 +98,14 @@ public class RandomPowerup : MonoBehaviour
         GetComponent<MeshRenderer>().enabled = false;
 
         GameManager.Instance.deductRandomPlayerScore(script.amount, script.powerUpDesc, script.debuf);
-
+        if (!script.debuf)
+        {
+            SoundManager.Instance.playPositivePowerUp();
+        }
+        else
+        {
+            SoundManager.Instance.playNegativePowerUp();
+        }
         yield return new WaitForSeconds(RespawnTime);
 
         GetComponent<Collider>().enabled = true;

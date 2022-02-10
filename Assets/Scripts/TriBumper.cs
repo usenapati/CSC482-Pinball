@@ -22,6 +22,7 @@ public class TriBumper : MonoBehaviour
         Debug.Log("Tri Collide");
         if (other.gameObject.CompareTag("Ball"))
         {
+            SoundManager.Instance.playTriBumper();
             Debug.Log ("APPLYING MASSIVE FORCE");
             other.rigidbody.AddForce(transform.right * forceAmount, ForceMode.Impulse);
             GameManager.Instance.addScore(1);

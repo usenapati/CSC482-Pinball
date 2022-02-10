@@ -31,6 +31,7 @@ public class Plunger : MonoBehaviour
 
             Rigidbody rb = ball.GetComponent<Rigidbody>();
             Vector3 movement = new Vector3(0.0f, 0.0f, 1.0f);
+            SoundManager.Instance.playPlunger();
             rb.AddForce(movement * plungerSpeed);
             GameManager.Instance.pulledPlunger();
             Debug.Log("Pulled Plunger");

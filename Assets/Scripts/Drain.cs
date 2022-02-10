@@ -20,6 +20,7 @@ public class Drain : MonoBehaviour
     {
         if (other.CompareTag("Ball"))
         {
+            SoundManager.Instance.playDrain();
             other.gameObject.SetActive(false);
             GameManager.Instance.lostBall();
         }

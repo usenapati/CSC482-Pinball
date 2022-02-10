@@ -33,7 +33,7 @@ public class BallController : MonoBehaviour
         //only generate collision sound on harder hits
         if (myCollision.relativeVelocity.magnitude > 10)
         {
-            audioPlayer.PlayOneShot(bounceClip);
+            //audioPlayer.PlayOneShot(bounceClip);
         }
     }
 }
