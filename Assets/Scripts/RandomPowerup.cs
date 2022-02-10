@@ -14,6 +14,7 @@ public class RandomPowerup : MonoBehaviour
     [Header("Power Up Manager")]
     public GameObject powerUpManager;
 
+    public int idleRotateSpeed;
     public int rotateSpeed;
     public float spinTime;
     public int RespawnTime;
@@ -53,6 +54,7 @@ public class RandomPowerup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        transform.Rotate(new Vector3(30, 30, 30) * idleRotateSpeed * Time.deltaTime);
         if (spinning)
         {
             float x = Random.Range(-15, 90);
@@ -64,16 +66,16 @@ public class RandomPowerup : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Ball"))
+        if (other.CompareTag("Ball") && !spinning)
         {
-            Debug.Log("inside trigger enter");
+            //Debug.Log("inside trigger enter");
             StartCoroutine("powerUpCoroutine");
         }
     }
 
     IEnumerator powerUpCoroutine()
     {
-        Debug.Log("made it to coroutine");
+        //Debug.Log("made it to coroutine");
         spinning = true;
         yield return new WaitForSeconds(spinTime);
         spinning = false;

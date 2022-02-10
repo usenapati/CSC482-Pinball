@@ -135,6 +135,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI GUI_Txt_Info_Cost;             // Event Cost
     public TextMeshProUGUI GUI_Txt_Score;                 // Score
     public TextMeshProUGUI GUI_Txt_Lives;                 // Lives
+    public GameObject GUI_Game_Over;
 
     // Use to display text on LCD screen
     public string[] arr_Info_Txt;               // Store Events
@@ -364,6 +365,7 @@ public class GameManager : MonoBehaviour
 
         GUI_Txt_Score.text = playerScore.ToString();
         GUI_Txt_Lives.text = currentLives.ToString();
+        GUI_Game_Over.SetActive(true);
 
         // Compare Final Score to Best Score
         if (highScore < playerScore)
