@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        SoundManager.Instance.playGameMusic();
         _instance = this;
     }
 
@@ -135,7 +136,11 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI GUI_Txt_Info_Cost;             // Event Cost
     public TextMeshProUGUI GUI_Txt_Score;                 // Score
     public TextMeshProUGUI GUI_Txt_Lives;                 // Lives
+    public TextMeshProUGUI GUI_Txt_BuyBallCost;                 // Lives
     public GameObject GUI_Game_Over;
+
+    [Header("Button")]
+    public Button btn_BuyBall;
 
     // Use to display text on LCD screen
     public string[] arr_Info_Txt;               // Store Events
@@ -234,6 +239,8 @@ public class GameManager : MonoBehaviour
     }
     private void startRoundState()
     {
+        btn_BuyBall.gameObject.SetActive(false);
+        GUI_Txt_BuyBallCost.gameObject.SetActive(false);
         // Reset Ball Save, Extra Ball, Multiball, Tilt
         ballsOnBoard = 0;
         roundStart = false;
@@ -338,19 +345,17 @@ public class GameManager : MonoBehaviour
     {
         // Stop Coroutines
         // One time call
-        CoroutineManager.GetComponent<WeeklyCoroutine>().stopWeeklyCoroutine();
+        
 
         GUI_Txt_Score.text = playerScore.ToString();
         GUI_Txt_Lives.text = currentLives.ToString();
 
         // Subtract Life
-        currentLives--;
 
         // Check Life > 0: True - Next Round False - End Game
         if (currentLives <= 0)
         {
-            // Switch to End Game State
-            e_gameState = gameState.endGameState;
+            
         }
         else
         {
@@ -361,50 +366,7 @@ public class GameManager : MonoBehaviour
     }
     private void endGameState()
     {
-        // Calculate Final Score
-
-        GUI_Txt_Score.text = playerScore.ToString();
-        GUI_Txt_Lives.text = currentLives.ToString();
-        GUI_Game_Over.SetActive(true);
-
-        // Compare Final Score to Best Score
-        if (highScore < playerScore)
-        {
-            // Set Text to "New High Score"
-            highScore = playerScore;
-        }
-        // Ask Player if they want to buy ball or save final score
-        if (playerScore > ballCost)
-        {
-            if (b_playerResponse && buyBall)
-            {
-                playerScore -= ballCost;
-                // If buy ball, then increase ball cost
-                ballCost *= 10;
-                currentLives++;
-                currentRound++;
-                //roundScore.Add(0);          // Add 0 to round scores, {x, y, z, 0}
-
-                e_gameState = gameState.startRoundState;
-            }
-            else if (b_playerResponse && !buyBall)
-            {
-                e_gameState = gameState.startGameState;
-            }
-        }
-        else
-        {
-            // If save final score, ask Player if they want to start a new game or exit
-            if (b_playerResponse && b_newGame)
-            {
-                e_gameState = gameState.startGameState;
-                b_newGame = false;
-            }
-            else if (b_playerResponse && b_exitGame)
-            {
-                ExitOnClick();
-            }
-        }
+        
 
 
 
@@ -435,7 +397,7 @@ public class GameManager : MonoBehaviour
 #endif
     }
 
-    // BAD
+    // Functions
     public void pulledPlunger()
     {
         Debug.Log("Pulled Plunger");
@@ -445,8 +407,19 @@ public class GameManager : MonoBehaviour
     
     public void lostBall()
     {
+        CoroutineManager.GetComponent<WeeklyCoroutine>().stopWeeklyCoroutine();
         Debug.Log("Fell into drain");
         ballsOnBoard--;
+        if (ballsOnBoard <= 0)
+        {
+            currentLives--;
+        }
+        if (currentLives <= 0)
+        {
+            // Switch to End Game State
+            e_gameState = gameState.endGameState;
+            endGame();
+        }
     }
 
     public void deductWeeklyPlayerScore(int val, string description, int weekNum)
@@ -486,5 +459,54 @@ public class GameManager : MonoBehaviour
     public void decreaseMultiplier()
     {
         multiplier /= 2;
+    }
+
+    public void BuyBall()
+    {
+        SoundManager.Instance.playCashRegister();
+        playerScore -= ballCost;
+        // If buy ball, then increase ball cost
+        ballCost *= 2;
+        currentLives++;
+        currentRound++;
+        GUI_Txt_Lives.text = currentLives.ToString();
+        e_gameState = gameState.startRoundState;
+    }
+
+    public void endGame()
+    {
+        // Calculate Final Score
+        //CoroutineManager.GetComponent<WeeklyCoroutine>().stopWeeklyCoroutine();
+        GUI_Txt_Score.text = playerScore.ToString();
+        GUI_Txt_Lives.text = currentLives.ToString();
+        GUI_Game_Over.SetActive(true);
+        
+
+        // Compare Final Score to Best Score
+        if (highScore < playerScore)
+        {
+            // Set Text to "New High Score"
+            highScore = playerScore;
+        }
+        // Ask Player if they want to buy ball or save final score
+        if (playerScore > ballCost)
+        {
+            GUI_Txt_BuyBallCost.text = "Ball Cost: $" + ballCost.ToString();
+            btn_BuyBall.gameObject.SetActive(true);
+            GUI_Txt_BuyBallCost.gameObject.SetActive(true);
+        }
+        else
+        {
+            // If save final score, ask Player if they want to start a new game or exit
+            if (b_playerResponse && b_newGame)
+            {
+                e_gameState = gameState.startGameState;
+                b_newGame = false;
+            }
+            else if (b_playerResponse && b_exitGame)
+            {
+                ExitOnClick();
+            }
+        }
     }
 }

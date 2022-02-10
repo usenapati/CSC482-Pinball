@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -299,6 +299,75 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1001 &776103395
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5316744642239028901, guid: 697a1cd7ef650ee4598b2637c782ed17,
+        type: 3}
+      propertyPath: m_Name
+      value: SoundManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316744642239028902, guid: 697a1cd7ef650ee4598b2637c782ed17,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316744642239028902, guid: 697a1cd7ef650ee4598b2637c782ed17,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316744642239028902, guid: 697a1cd7ef650ee4598b2637c782ed17,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316744642239028902, guid: 697a1cd7ef650ee4598b2637c782ed17,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316744642239028902, guid: 697a1cd7ef650ee4598b2637c782ed17,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316744642239028902, guid: 697a1cd7ef650ee4598b2637c782ed17,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316744642239028902, guid: 697a1cd7ef650ee4598b2637c782ed17,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316744642239028902, guid: 697a1cd7ef650ee4598b2637c782ed17,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316744642239028902, guid: 697a1cd7ef650ee4598b2637c782ed17,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316744642239028902, guid: 697a1cd7ef650ee4598b2637c782ed17,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316744642239028902, guid: 697a1cd7ef650ee4598b2637c782ed17,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 697a1cd7ef650ee4598b2637c782ed17, type: 3}
 --- !u!1 &1415636892
 GameObject:
   m_ObjectHideFlags: 0
@@ -694,7 +763,10 @@ PrefabInstance:
     - target: {fileID: 411862252812126822, guid: c20c1ffeaefe42642a2067b53207c671,
         type: 3}
       propertyPath: m_text
-      value: Dr. Arnav Jhala - Sample Pinball Code
+      value: 'Dr. Arnav Jhala - Sample Pinball Code, Asset
+
+        Mitchell Dunning
+        - Decorative Models'
       objectReference: {fileID: 0}
     - target: {fileID: 411862252812126822, guid: c20c1ffeaefe42642a2067b53207c671,
         type: 3}
@@ -752,3 +824,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   creditsPanel: {fileID: 1498068073}
   startPanel: {fileID: 1498068072}
+--- !u!114 &1498068075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1498068071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdc9bf924d0eb564ab8e4543bf03d6db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

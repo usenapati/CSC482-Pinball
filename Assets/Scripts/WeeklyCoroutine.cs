@@ -25,6 +25,7 @@ public class WeeklyCoroutine : MonoBehaviour
    
     private int numWeeks = 4;                   //the number of weeks in a month
     private int currWeek = 1;                   //the current week we are on
+    //private bool running = true;
 
     private void Start()
     {
@@ -38,7 +39,8 @@ public class WeeklyCoroutine : MonoBehaviour
 
     public void stopWeeklyCoroutine()           //stops the runnint coroutine    
     {
-        StopCoroutine(weeklyCoroutine(null));
+        //running = false;
+        StopAllCoroutines();
     }
 
     IEnumerator weeklyCoroutine(Transform target)
