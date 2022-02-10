@@ -66,16 +66,16 @@ public class RandomPowerup : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Ball"))
+        if (other.CompareTag("Ball") && !spinning)
         {
-            Debug.Log("inside trigger enter");
+            //Debug.Log("inside trigger enter");
             StartCoroutine("powerUpCoroutine");
         }
     }
 
     IEnumerator powerUpCoroutine()
     {
-        Debug.Log("made it to coroutine");
+        //Debug.Log("made it to coroutine");
         spinning = true;
         yield return new WaitForSeconds(spinTime);
         spinning = false;
