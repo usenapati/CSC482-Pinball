@@ -210,7 +210,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 770b79d0d4576204ca39fca667602ab9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  plungerSpeed: 2750
+  plungerSpeed: 2887.38
   ball: {fileID: 941635071}
 --- !u!114 &21132397
 MonoBehaviour:
